@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="RTK Coding Standard">
+	<rule ref="./vendor/r-tk/rtk-coding-standard/phpcs.xml"/>
+
+	<file>./src</file>
+	<file>./tests</file>
+
+</ruleset>
