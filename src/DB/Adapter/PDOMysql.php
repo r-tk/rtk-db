@@ -96,6 +96,11 @@ class PDOMysql extends PDO implements DBAdapterInterface {
 			$dsn .= 'charset=' . $settings['charset'];
 		}
 
+		if (!empty($settings['port']) && stristr($dsn, 'port=') === false) {
+			$dsn .= strstr($dsn, ':') ? ';' : ':';
+			$dsn .= 'port=' . $settings['port'];
+		}
+
 		$this->settings = array(
 			'dsn'      => $dsn,
 			'username' => $settings['user'],
