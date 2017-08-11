@@ -9,7 +9,11 @@ class PDOMysql extends PDO implements DBAdapterInterface {
 
 	protected $settings;
 
-	private function unifyUsernameAndPassword(&$settings) {
+	private function initSettings(&$settings) {
+
+		if (!is_array($settings)) {
+			$settings = array();
+		}
 
 		if (!isset($settings['user'])) {
 			if (isset($settings['username'])) {
@@ -32,6 +36,18 @@ class PDOMysql extends PDO implements DBAdapterInterface {
 			}
 		}
 
+		if (!isset($settings['database'])) {
+			// NOTE: there seems no difference between the following use cases:
+			//        - mysql:dbname=;host=localhost
+			//        - mysql:host=localhost
+			//       so we can skip empty($settings['database']) check and allow empty string
+			$settings['database'] = '';
+		}
+
+		if (!isset($settings['options'])) {
+			$settings['options'] = array();
+		}
+
 	}
 
 	private function constructDsnFromIniSettings($settings) {
@@ -48,25 +64,9 @@ class PDOMysql extends PDO implements DBAdapterInterface {
 
 	}
 
-	public function __construct($settings) {
-		// TODO: $settings['port'], yes? no? maybe?
+	public function __construct($settings = array()) {
 
-		if (!is_array($settings)) {
-			$settings = array();
-		}
-
-		$this->unifyUsernameAndPassword($settings);
-
-		if (!isset($settings['database'])) {
-			// NOTE: there seems no difference between the following use cases:
-			//        - mysql:dbname=;host=localhost
-			//        - mysql:host=localhost
-			//       so we can skip empty($settings['database']) check and allow empty string
-			$settings['database'] = '';
-		}
-		if (!isset($settings['options'])) {
-			$settings['options'] = array();
-		}
+		$this->initSettings($settings);
 
 		// http://www.php.net/manual/en/ref.pdo-mysql.connection.php
 		$dsn = '';
