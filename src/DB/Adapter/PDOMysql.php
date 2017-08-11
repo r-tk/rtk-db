@@ -9,7 +9,21 @@ class PDOMysql extends PDO implements DBAdapterInterface {
 
 	protected $settings;
 
-	private function initSettings(&$settings) {
+	private function constructDsnFromIniSettings($settings) {
+
+		$host = ini_get("mysqli.default_host");
+		$socket = ini_get("mysqli.default_socket");
+
+		if (!empty($host)) {
+			return 'mysql:dbname=' . $settings['database'] . ';host=' . $host;
+		}
+		if (!empty($settings['socket'])) {
+			return 'mysql:dbname=' . $settings['database'] . ';unix_socket=' . $socket;
+		}
+
+	}
+
+	public function __construct($settings = array()) {
 
 		if (!is_array($settings)) {
 			$settings = array();
@@ -47,26 +61,6 @@ class PDOMysql extends PDO implements DBAdapterInterface {
 		if (!isset($settings['options'])) {
 			$settings['options'] = array();
 		}
-
-	}
-
-	private function constructDsnFromIniSettings($settings) {
-
-		$host = ini_get("mysqli.default_host");
-		$socket = ini_get("mysqli.default_socket");
-
-		if (!empty($host)) {
-			return 'mysql:dbname=' . $settings['database'] . ';host=' . $host;
-		}
-		if (!empty($settings['socket'])) {
-			return 'mysql:dbname=' . $settings['database'] . ';unix_socket=' . $socket;
-		}
-
-	}
-
-	public function __construct($settings = array()) {
-
-		$this->initSettings($settings);
 
 		// http://www.php.net/manual/en/ref.pdo-mysql.connection.php
 		$dsn = '';
