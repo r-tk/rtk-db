@@ -68,7 +68,9 @@ class PDOMysql extends PDO implements DBAdapterInterface {
 			$settings['options'] = array();
 		}
 
+		// http://www.php.net/manual/en/ref.pdo-mysql.connection.php
 		$dsn = '';
+
 		if (isset($settings['dsn'])) {
 			$dsn = $settings['dsn'];
 		} elseif (isset($settings['host'])) {
