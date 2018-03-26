@@ -76,7 +76,7 @@ class PDOMysql extends PDO implements DBAdapterInterface {
 		}
 
 		if (empty($dsn)) {
-			throw new Exception('No connection settings given, and unable to guess from php.ini');
+			throw new DBAdapterException('No connection settings given, and unable to guess from php.ini');
 		}
 
 		if (!empty($settings['database']) && stristr($dsn, 'dbname=') === false) {

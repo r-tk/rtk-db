@@ -1,8 +1,6 @@
 <?php
 namespace RTK\DB\Adapter;
 
-use Exception;
-
 class PDO {
 
 	protected $pdo;
@@ -50,14 +48,14 @@ class PDO {
 	public function isConnected() {
 
 		// TODO
-		throw new Exception('PDO isConnected method has not been implemented yet');
+		throw new DBAdapterException('PDO isConnected method has not been implemented yet');
 
 	}
 
 	public function __call($method, $args) {
 
 		if (!method_exists($this->pdo, $method)) {
-			throw new Exception("unknown method [$method]");
+			throw new DBAdapterException("unknown method [$method]");
 		}
 
 		return $this->pdo->$method(...$args);

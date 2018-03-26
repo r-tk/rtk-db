@@ -75,7 +75,7 @@ class Mysqli extends \mysqli implements DBAdapterInterface {
 	 *
 	 * @param boolean $force re-connect to DB even if
 	 *                a connection has already been established
-	 * @throws Exception
+	 * @throws DBAdapterException
 	 */
 	private function openConnection($force = false) {
 
@@ -98,7 +98,7 @@ class Mysqli extends \mysqli implements DBAdapterInterface {
 		);
 
 		if ($connection === false) {
-			throw new Exception('Connection failed: #'
+			throw new DBAdapterException('Connection failed: #'
 				. $this->connect_errno
 				. ' - '
 				. $this->connect_error);
@@ -121,9 +121,8 @@ class Mysqli extends \mysqli implements DBAdapterInterface {
 			return false;
 		}
 
-		// replace with this->query
 		try {
-			$res = $this->query('DO 1');
+			$this->query('DO 1');
 		} catch (Exception $e) {
 			return false;
 		}
@@ -137,14 +136,14 @@ class Mysqli extends \mysqli implements DBAdapterInterface {
 	 * @param string $query
 	 * @param $resultmode
 	 * @return bool|\mysqli_result
-	 * @throws Exception
+	 * @throws DBAdapterException
 	 */
 	public function query($query, $resultmode = MYSQLI_STORE_RESULT) {
 
 		$res = @parent::query($query, $resultmode);
 
 		if ($res === false) {
-			throw new Exception("query failed: " . $this->error);
+			throw new DBAdapterException("query failed: " . $this->error);
 		}
 
 		return $res;

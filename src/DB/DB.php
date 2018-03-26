@@ -1,8 +1,6 @@
 <?php
 namespace RTK\DB;
 
-use Exception;
-
 class DB {
 
 	/**
@@ -20,7 +18,7 @@ class DB {
 	 *
 	 * @param string $name
 	 * @param array $settings
-	 * @throws Exception
+	 * @throws DBException
 	 */
 	public static function addInstance($name, $settings) {
 
@@ -29,7 +27,7 @@ class DB {
 		}
 
 		if (empty($settings['type'])) {
-			throw new Exception('type not set for db instance ' . $name);
+			throw new DBException('type not set for db instance ' . $name);
 		}
 
 		self::$instances[$name] = $settings;
@@ -41,7 +39,7 @@ class DB {
 	 *
 	 * @param string $name
 	 * @return RTK\DB\Adapter\DBAdapterInterface
-	 * @throws Exception
+	 * @throws DBException
 	 */
 	public static function get($name = 'default') {
 
@@ -50,14 +48,14 @@ class DB {
 		}
 
 		if (!isset(self::$instances[$name])) {
-			throw new Exception('db instance "'.$name.'" has not been defined');
+			throw new DBException('db instance "'.$name.'" has not been defined');
 		}
 
 		$instance_config = self::$instances[$name];
 		$adapter = 'RTK\\DB\\Adapter\\' . ucfirst($instance_config['type']);
 
 		if (!class_exists($adapter)) {
-			throw new Exception('Failed to load DB adapter ' . $adapter);
+			throw new DBException('Failed to load DB adapter ' . $adapter);
 		}
 
 		$instance = new $adapter($instance_config);
@@ -66,7 +64,7 @@ class DB {
 			'RTK\\DB\\Adapter\\DBAdapterInterface',
 			class_implements($instance)
 		)) {
-			throw new Exception('DB Adapter '
+			throw new DBException('DB Adapter '
 				 . $instance_config['type']
 				 . ' is not implementing DBAdapterInterface');
 		}
