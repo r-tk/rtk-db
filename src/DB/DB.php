@@ -38,7 +38,7 @@ class DB {
 	 * quick-access to get instance of a database connection
 	 *
 	 * @param string $name
-	 * @return RTK\DB\Adapter\DBAdapterInterface
+	 * @return Adapter\mysqli|Adapter\PDO|Adapter\PDOMysql|Adapter\DBAdapterInterface
 	 * @throws DBException
 	 */
 	public static function get($name = 'default') {

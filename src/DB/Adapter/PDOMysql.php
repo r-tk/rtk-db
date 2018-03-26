@@ -3,6 +3,9 @@ namespace RTK\DB\Adapter;
 
 use Exception;
 
+/**
+ * PDO wrapper with MySQL driver specific helpers/modifiers
+ */
 class PDOMysql extends PDO implements DBAdapterInterface {
 
 	protected $pdo;
